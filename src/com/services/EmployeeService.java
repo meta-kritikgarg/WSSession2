@@ -3,6 +3,7 @@ package com.services;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -11,8 +12,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
-import org.junit.experimental.theories.ParametersSuppliedBy;
 
 import com.model.facade.EmployeeFacade;
 import com.model.vo.EmployeeVO;
@@ -23,24 +22,23 @@ public class EmployeeService {
 	
 	@POST
 	@Path("/add")
-	@Produces( MediaType.APPLICATION_JSON)
-	public String addEmployee(@QueryParam("firstName") String firstName,
-	@QueryParam("lastName") String lastName,
-	@QueryParam("email") String email,
-	@QueryParam("address") String address) throws SQLException {
-
-	EmployeeVO employee = new EmployeeVO();
+	@Consumes( MediaType.APPLICATION_JSON)
+	public String addEmployee(EmployeeVO emVo) throws SQLException {
+		EmployeeFacade employeeFacade = new EmployeeFacade();
+	//EmployeeVO employee = new EmployeeVO();
 	
-	employee.setFirstName(firstName);
+/*	employee.setFirstName(firstName);
 	employee.setLastName(lastName);
 	employee.setEmail(email);
 	employee.setAddress(address);
-	EmployeeFacade employeeFacade = new EmployeeFacade();
-
-	boolean result = employeeFacade.save(employee);
+	employee.setId(-1);
+	
+*/
+		System.out.println(emVo);
+	boolean result = employeeFacade.save(emVo);
 	String responce = "Error";
 		if(result) {
-			responce =  " Employee successfully Delete !!! ";	
+			responce =  " Employee successfully Added !!! ";	
 		}
 		return responce;
 	}
