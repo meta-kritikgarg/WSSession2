@@ -11,7 +11,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.apache.catalina.filters.CorsFilter;
 
 import com.model.facade.EmployeeFacade;
 import com.model.vo.EmployeeVO;
@@ -40,6 +44,7 @@ public class EmployeeService {
 		if(result) {
 			responce =  " Employee successfully Added !!! ";	
 		}
+		Response.ok(responce).header("Access-Control-Allow-Origin", CorsFilter.DEFAULT_ALLOWED_ORIGINS).build();
 		return responce;
 	}
 	
@@ -47,10 +52,15 @@ public class EmployeeService {
 	@GET
 	@Path("/employeelist")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<EmployeeVO> employees() {
-		EmployeeFacade employeeFacade = new EmployeeFacade();
+	public Response employees() {
+		EmployeeFacade employeeFacade = new EmployeeFacade();		
+		List<EmployeeVO> list =  employeeFacade.findAll();
 		
-		return employeeFacade.findAll();
+
+	GenericEntity<List<EmployeeVO>> generic = new GenericEntity<List<EmployeeVO>>(list){};
+		
+		return Response.ok(generic).header("Access-Control-Allow-Origin", CorsFilter.DEFAULT_ALLOWED_ORIGINS).build();
+		
 	}
 	
 	
